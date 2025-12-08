@@ -25,6 +25,8 @@ config = {
 初回起動時に設定します。書き換える必要はありません。
 """
 
+wordlist = set()
+
 """
 発見済み・未解決のバグ(対応策など)
 1. 一部の単語が、更新箇所が無いにも関わらず更新するか確認される (更新するかどうかを毎回選択してください)
@@ -46,6 +48,10 @@ i : キーボード入力から読み込み (input)
     単語の変化形が含まれている場合は、そこに含まれる単語の原形を推測する。
     最初の改行文字までを扱うため、改行が含まれる文章はあらかじめ詰めておく必要がある。
     文脈の無い単語の変化形を入力すると誤推測の可能性あり。(例えばтестеはтест(テスト), тесто(パンなどの生地), тесть(舅)のいずれの可能性もある)
+
+p : 部分一致検索して登録 (partial match)
+    入力した文字列を部分文字列に持つ単語を調べる。
+    「カードにしますか？」に対して「y」と入力すると、意味を1, 2つずつまとめたカードを作成する。
 
 r : コトバンクからランダム抽出 (random)
     コトバンクに収録されている語をランダムに抽出する。
@@ -777,6 +783,33 @@ def Random_Make_Note(q):
             print(Get_Meaning(Scraping_Words(word)).replace("<br>", "\n"))
             input("次の単語へ(Enter)")
 
+def Get_Wordlist(filepath):
+    with open(filepath, "w", encoding="utf-8") as f:
+        for page_number in range(1, 645): 
+            sleep(uniform(3,6)) # 最大 644 * 6秒 ~ 3900秒 ~ 1時間程度
+            if page_number == 1:
+                url = f"https://kotobank.jp/dictionary/prj/"
+            else:
+                url = f"https://kotobank.jp/dictionary/prj/{page_number}/"
+            response = requests.get(url)
+            response.encoding = "utf-8"
+            page = BeautifulSoup(response.text, "html.parser")
+            words_list = page.find("section", class_="list")
+            words_list = words_list.find_all("li")
+            for word in words_list:
+                f.write(f"{word.text}\n")
+
+def Find_Substrings(string):
+    words = []
+    filepath = os.path.join(os.path.dirname(__file__), "wordlist.txt")
+    if not len(wordlist):
+        if not os.path.exists(filepath):
+            Get_Wordlist(filepath=filepath)
+        with open(filepath, "r", encoding="utf-8") as f:
+            wordlist.update(f.readlines())
+    words = [word.replace("\n", "") for word in wordlist if string in word]
+    return words
+
 def main():
     """
     モード選択および選ばれたモードに対応した標準入力を要求する関数
@@ -795,6 +828,7 @@ def main():
                 print("カードを追加するデッキ：", config["deck_name"][deck_num])
                 print("f：ファイルから読み込み")
                 print("i：キーボード入力から読み込み")
+                print("p：部分一致検索して登録")
                 print("r：コトバンクからランダム抽選")
                 print("o：unfound_wordsを整理する")
                 print("b：戻る")
@@ -838,6 +872,16 @@ def main():
                             Random_Make_Note(q)
                     else:
                         print("単語の追加をキャンセルしました")
+                elif opt == "p":
+                    texts = []
+                    while True:
+                        text = input("検索したい文字列を入力してください：")
+                        if len(text) == 0:
+                            break
+                        print(Find_Substrings(text))
+                    #     texts.extend(Find_Substrings(text))
+                    # wordset = list(set(texts))
+                    # null_dev = Make_Notes(wordset)
                 elif opt == "b":
                     break
         elif mode == "2":
