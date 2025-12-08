@@ -9,7 +9,7 @@
 ```bash
 pip install beautifulsoup4 psutil requests natasha
 ```
-以上の準備が終わったらRtoJ-anki-register.pyを実行すると、初回設定後すぐに利用できます、
+以上の準備が終わったらRtoJ-anki-register.pyを実行すると、初回設定後すぐに利用できます。
 
 使用時は事前に Anki を起動しておく必要があります。設定すれば自動起動させることもできます(設定は初回実行時の案内にしたがってください)。
 
