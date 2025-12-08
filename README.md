@@ -6,7 +6,7 @@
 が必要です。\
 また、以下のコマンドを実行して、事前にライブラリをインストールしてください。
 ```bash
-pip install beautifulsoup4 psutil requests
+pip install beautifulsoup4 psutil requests natasha
 ```
 
 使用時は事前に Anki を起動しておく必要があります。設定すれば自動起動させることもできます。
