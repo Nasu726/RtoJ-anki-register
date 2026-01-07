@@ -1,6 +1,6 @@
 ここでは使い方について説明しています。
 
-## 準備
+## 準備 (pip installで使えるようにする予定です)
 - Pythonのプログラムを実行できる環境
 - AnkiConnect (アドオン番号：2055492159)
 
@@ -98,3 +98,4 @@ config 内で input_file に指定したファイル(.txt, .mdなど)から全�
 
 <!-- ## ～～その他～～
 バグや不具合の報告は GitHub (https://github.com/Nasu726/) または note (https://note.com/nasu726/) まで。  -->
+
