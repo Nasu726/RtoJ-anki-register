@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "RtoJ-anki-register"
+version = "0.1.0"
+description = ""
+dependencies = [
+    "beautifulsoup4",
+    "psutil",
+    "requests",
+    "natasha"
+]
+
+requires-python = ">=3.11"
+
+[project.scripts]
+rj-anki = "app.RtoJ-anki-register:main"

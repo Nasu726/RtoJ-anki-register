@@ -10,6 +10,7 @@ import subprocess
 from time import sleep
 from urllib.parse import quote
 
+wordlist = set()
 config = {
     "lang": "JP", # Ankiの言語設定に合わせてください (デフォルト：日本語)
     "anki_path": None, # Anki.exeの絶対パスを指定 (必須ではない)
@@ -24,8 +25,6 @@ config = {
 基本設定(デフォルト)
 初回起動時に設定します。書き換える必要はありません。
 """
-
-wordlist = set()
 
 """
 発見済み・未解決のバグ(対応策など)
@@ -98,16 +97,16 @@ q : やめる (quit)
 ～～注意事項・お願い～～
 "特定少数の私的利用かつ非商用利用" をお願いします。よって、再配布や営利目的の利用は禁止します。
 より快適な利用のための改造は基本的に自由にできますが、「sleep(uniform(2, 4))を削除する」「ウイルスを仕込む」など、他人に迷惑がかかる改造はおやめください。
-上記が守られなかった場合に生じた問題において、原作者であるnasu(https://note.com/nasu726)は一切責任を負いません。
+上記が守られなかった場合に生じた問題において、原作者であるnasu(https://github.com/Nasu726)は一切責任を負いません。
 
 ～～その他～～
-バグや不具合の報告は GitHub (https://github.com/Nasu726/) または note (https://note.com/nasu726/) まで。
+バグや不具合の報告は GitHub (https://github.com/Nasu726/) または 
 """
 
 ##############################################################################################################
 # Config に関する部分
 
-# 複数の関数で使用するためグローバルで定義
+# 複数の関数で横断して使用するためグローバルで定義
 lang = config["lang"] 
 deck_num = config["deck_num"]-1
 
@@ -810,7 +809,7 @@ def Find_Substrings(string):
     words = [word.replace("\n", "") for word in wordlist if string in word]
     return words
 
-def main():
+def _main():
     """
     モード選択および選ばれたモードに対応した標準入力を要求する関数
     """
@@ -912,11 +911,11 @@ def main():
             Kill_Anki_Process()
             exit(0)
 
-if __name__ == "__main__":
+def main():
     """
     config.json のデータを読み込んでから main関数を始める
     """
     config = Read_Config()
     config["deck_name"] = Get_Deck_Name()
     Get_Deck_Version()
-    main()
+    _main()
